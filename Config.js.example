@@ -1,0 +1,34 @@
+const Eris = require("eris");
+
+module.exports = {
+    token: {
+        beta: "",
+        bot: ""
+    },
+    beta: false,
+    prefix: "<",
+    enableEvents: true,
+    /**
+     * @type {Eris.ClientOptions}
+     */
+    eris: {
+        allowedMentions: {
+            everyone: false,
+            roles: false,
+            users: true
+        },
+        messageLimit: 40,
+        restMode: true,
+        autoreconnect: true,
+        compress: true,
+        intents: [
+            "guilds",
+            "guildMessages",
+            "guildEmojis",
+            "guildMembers",
+            "guildMessageReactions",
+            "directMessages",
+            "guildPresences"
+        ]
+    }
+}

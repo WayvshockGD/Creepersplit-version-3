@@ -1,0 +1,19 @@
+{
+  "name": "creeper-v3",
+  "version": "1.0.0",
+  "description": "Version three of the creepersplit bot.",
+  "main": "start.js",
+  "scripts": {
+    "lint": "eslint --fix"
+  },
+  "author": "Wayvshock",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/node": "^16.9.2",
+    "eslint": "^7.32.0"
+  },
+  "dependencies": {
+    "eris": "git+https://github.com/bsian03/eris.git#dev",
+    "ms": "^3.0.0-canary.1"
+  }
+}
