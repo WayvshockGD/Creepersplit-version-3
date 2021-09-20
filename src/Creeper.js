@@ -19,6 +19,11 @@ module.exports = class Creeper extends Eris.Client {
          */
         this.commands = new Map();
 
+        /**
+         * @type {import("../typings/Command").commandMap}
+         */
+        this.subCommands = new Map();
+
         this.type = Config.beta ? "Beta" : "Prod"
 
         this.loadCommands();
@@ -39,7 +44,7 @@ module.exports = class Creeper extends Eris.Client {
     }
 
     /**
-     * @param {import("../typings/Define").Define.Colors} color
+     * @param {import("@typings/Define").Define.Colors} color
      */
     getColor(color) {
         let colorTree = {
@@ -61,7 +66,13 @@ module.exports = class Creeper extends Eris.Client {
                  */
                 let data = new Command();
 
-                this.commands.set(data.name, data);
+                if (!data.options.subs) {
+                    this.commands.set(data.name, data);
+                } else {
+                    for (let s of data.options.subs) {
+                        this.subCommands.set(s, this.commands.get(s));
+                    }
+                }
             });
         });
     }

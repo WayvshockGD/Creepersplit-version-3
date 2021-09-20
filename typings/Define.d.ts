@@ -11,6 +11,7 @@ declare namespace Define {
     export class Creeper extends Eris.Client {
         type: "Beta" | "Prod";
         commands: Map<string, CommandData>;
+        subCommands: Map<string, CommandData>;
         getColor(color: Colors): number;
     }
 }

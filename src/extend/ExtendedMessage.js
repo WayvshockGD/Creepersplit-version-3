@@ -49,8 +49,8 @@ module.exports = class ExtendedMessage extends Message {
         let guild = this.channel.guild;
 
         return guild.members.find(member => member.id === args) ||
-            guild.members.find(member => member.mention === args) ||
-            guild.members.find(member => member.nick === args);
+               guild.members.find(member => member.mention === args) ||
+               guild.members.find(member => member.nick === args);
     }
 
     /**

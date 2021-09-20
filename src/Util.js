@@ -17,21 +17,10 @@ module.exports = class Util {
      * @param {import("../typings/Classes").Extended.ExtendedMessageContent} content
      * @param {import("../typings/Define").Define.MessageOptions} options
      */
-    sendMessage(content, options = { delete: undefined }) {
-        return this.message.channel.createMessage(content).then(m => {
-            if (options.delete) {
-                let time;
-
-                if (typeof options.delete === "string") {
-                    time = ms(options.delete);
-                } else {
-                    time = options.delete;
-                };
-
-                setTimeout(() => {
-                    m.delete();
-                }, time);
-            }
-        })
+    sendMessage(content) {
+        return this.message.channel.createMessage(content)
+               .catch(err => {
+                   console.log(`Bot is unable to talk in channel! #${this.message.channel.id}`);
+               });
     }
 }

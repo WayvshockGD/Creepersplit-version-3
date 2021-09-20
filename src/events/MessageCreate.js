@@ -13,9 +13,43 @@ module.exports = function({ message, client }) {
 
     args = args.slice(1);
 
+    let has = command.options.hasArgs(args, message);
+
+    if (has === false) {
+        return;
+    }
+
+    if (command.options.subs) {
+        if (!command.options.enabled) {
+            return;
+        }
+
+        console.log
+        let sub = client.subCommands.get(args[0]);
+
+        console.log(sub)
+
+        if (sub) {
+            let subArgs = sub.options.hasArgs(args.slice(1), message);
+            args = args.slice(1);
+
+            return sub.execute({
+                client,
+                message,
+                args: {
+                    command: args,
+                    has: subArgs
+                }
+            })
+        }
+    }
+
     command.execute({
         message,
-        args,
+        args: {
+            command: args,
+            has
+        },
         client,
     });
 }

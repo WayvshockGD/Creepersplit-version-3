@@ -12,13 +12,19 @@ export interface CommandData {
 export interface CommandOptions {
     permLevel: perms;
     enabled: boolean;
+    subs: string[];
+    requiredArgs: number;
+    hasArgs: (args: string[], message: Extended.Message) => string | boolean;
     permissions: Array<keyof Eris.Constants["Permissions"]>;
 }
 
 export interface CommandCTX {
     client: Define.Creeper;
     message: Extended.Message;
-    args: string[];
+    args: {
+        command: string[];
+        has: string | object | number;
+    };
 }
 
 
