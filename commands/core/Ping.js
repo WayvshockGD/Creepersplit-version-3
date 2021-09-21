@@ -2,7 +2,10 @@ const BaseCommand = require("../../src/BaseCommand");
 
 module.exports = class Ping extends BaseCommand {
     constructor() {
-        super({ name: "ping" });
+        super({ 
+            name: "ping",
+            description: "Command to show shard and bot ping."
+        });
     }
 
     /**

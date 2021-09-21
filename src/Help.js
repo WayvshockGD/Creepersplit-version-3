@@ -28,7 +28,7 @@ module.exports = class Help {
         for (let command of this.client.commands.values()) {
             switch (command.options.category) {
                 case "core":
-                    core.push(`\`${prefix}${command.name}\``);
+                    core.push(`\`${prefix}${command.name}\`${command.options.enabled ? "" : " (disabled)"}`);
                     break;
                 case "misc":
                     misc.push(`\`${prefix}${command.name}\``);
@@ -51,6 +51,10 @@ module.exports = class Help {
                     name: "Misc Commands",
                     value: misc.join(", ")
                 }],
+                footer: {
+                    text: `To look at a command say ${prefix}help <command>`,
+                    icon_url: this.client.user.avatarURL
+                },
                 color: this.client.getColor("Default")
             }]
         })
@@ -72,11 +76,15 @@ module.exports = class Help {
 
         data.push(`Name - ${command.name}`);
 
+        data.push(`Is enabled - ${options.enabled ? "Yes" : "No"}`);
+
         if (command.description) data.push(`Description - ${command.description}`);
 
         if (command.aliases.length) data.push(`Aliases - ${command.aliases.join(", ")}`);
 
         if (options.permissions.length) data.push(`Permissions - ${options.permissions.join(", ")}`);
+
+        if (options.category) data.push(`Category - ${options.category}`);
 
         if (options.subs.length) {
             for (let sub of options.subs) {
@@ -84,12 +92,14 @@ module.exports = class Help {
             };
         };
 
-        let commandData = [
-            util.codeBlock(`Sub Commands:\n${subCommands.join("\n")}`)
-        ];
+        let commandData = [];
 
         if (data.length) {
             commandData.push(util.codeBlock(data.join("\n")));
+        }
+
+        if (subCommands.length) {
+            commandData.push(util.codeBlock(`Sub Commands:\n${subCommands.join("\n")}`));
         }
 
         this.message.channel.createMessage(commandData.join(""));

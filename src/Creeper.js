@@ -4,6 +4,7 @@ const Config = require("../Config");
 const MessageCreate = require("./events/MessageCreate");
 const Ready = require("./events/Ready");
 const ExtendedMessage = require("./extend/ExtendedMessage");
+const KNEX = require("./Knex");
 
 // For using beta or prod token.
 let token = Config.beta ? Config.token.beta : Config.token.bot;
@@ -28,6 +29,8 @@ module.exports = class Creeper extends Eris.Client {
          * @type {import("../typings/Command").commandMap}
          */
         this.aliases = new Map();
+
+        this.db = KNEX;
 
         this.type = Config.beta ? "Beta" : "Prod"
 

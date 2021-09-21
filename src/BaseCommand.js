@@ -20,7 +20,7 @@ module.exports = class BaseCommand {
             category: undefined,
             requiredArgs: 0,
             permissions: [],
-            subs: undefined
+            subs: []
         }, options);
     }
 

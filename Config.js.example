@@ -8,6 +8,11 @@ module.exports = {
     beta: false,
     prefix: "<",
     enableEvents: true,
+    database: {
+        host: "",
+        user: "",
+        password: ""
+    },
     /**
      * @type {Eris.ClientOptions}
      */
