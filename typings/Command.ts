@@ -10,6 +10,12 @@ export interface CommandData {
     options: CommandOptions;
 }
 
+export interface pluginData {
+    name: string;
+    enabled: boolean;
+    execute: (message: Eris.Message, args: string[], client: Define.Creeper) => void;
+}
+
 export interface CommandOptions {
     permLevel: perms;
     enabled: boolean;

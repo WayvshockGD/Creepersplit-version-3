@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "eris": "git+https://github.com/bsian03/eris.git#dev",
+    "got": "^11.8.2",
     "knex": "^0.95.11",
     "moment": "^2.29.1",
     "ms": "^3.0.0-canary.1",

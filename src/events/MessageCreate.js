@@ -12,6 +12,8 @@ module.exports = function ({ message, client }) {
         return new Help(message, args.slice(1), client);
     }
 
+    client.plugins.onMessage(message, args);
+
     let command = client.commands.get(args[0]) || client.aliases.get(args[0]);
 
     if (!command) return;

@@ -1,5 +1,6 @@
 import Eris from "eris";
 import { Knex } from "knex";
+import { Classes } from "./Classes";
 import { CommandData } from "./Command";
 
 declare namespace Define {
@@ -14,6 +15,7 @@ declare namespace Define {
         commands: Map<string, CommandData>;
         subCommands: Map<string, CommandData>;
         aliases: Map<string, CommandData>;
+        plugins: Classes.PluginManager;
         db: Knex;
         config: {
             token: {

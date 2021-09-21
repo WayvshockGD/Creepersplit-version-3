@@ -52,7 +52,7 @@ module.exports = class Help {
                     value: misc.join(", ")
                 }],
                 footer: {
-                    text: `To look at a command say ${prefix}help <command>`,
+                    text: `To look at a command run ${prefix}help <command>`,
                     icon_url: this.client.user.avatarURL
                 },
                 color: this.client.getColor("Default")

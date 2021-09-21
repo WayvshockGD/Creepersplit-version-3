@@ -5,6 +5,7 @@ const MessageCreate = require("./events/MessageCreate");
 const Ready = require("./events/Ready");
 const ExtendedMessage = require("./extend/ExtendedMessage");
 const KNEX = require("./Knex");
+const PluginManager = require("./plugins/PluginManager");
 
 // For using beta or prod token.
 let token = Config.beta ? Config.token.beta : Config.token.bot;
@@ -30,6 +31,8 @@ module.exports = class Creeper extends Eris.Client {
          */
         this.aliases = new Map();
 
+        this.plugins = new PluginManager(this);
+
         this.db = KNEX;
 
         this.type = Config.beta ? "Beta" : "Prod"
@@ -50,7 +53,7 @@ module.exports = class Creeper extends Eris.Client {
         });
 
         this.on("ready", () => {
-            Ready();
+            Ready(this);
         });
     }
 
@@ -69,6 +72,8 @@ module.exports = class Creeper extends Eris.Client {
     }
 
     loadCommands() {
+        this.plugins.startLoad();
+        
         fs.readdirSync("./commands/").forEach(folder => {
             fs.readdirSync(`./commands/${folder}`).filter(fi => fi.endsWith(".js")).forEach(f => {
                 let Command = require(`../commands/${folder}/${f}`);
