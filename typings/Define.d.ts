@@ -12,6 +12,17 @@ declare namespace Define {
         type: "Beta" | "Prod";
         commands: Map<string, CommandData>;
         subCommands: Map<string, CommandData>;
+        aliases: Map<string, CommandData>;
+        config: {
+            token: {
+                beta: string;
+                bot: string;
+            }
+            enableEvents: boolean;
+            prefix: string;
+            beta: boolean;
+            eris: Eris.ClientOptions;
+        }
         getColor(color: Colors): number;
     }
 }

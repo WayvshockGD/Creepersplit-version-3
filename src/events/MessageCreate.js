@@ -1,13 +1,18 @@
-const Config = require("../../Config")
+const Config = require("../../Config");
+const Help = require("../Help");
 
 /**
  * @param {import("../../typings/Event").MessageCreateEvent} param
  */
-module.exports = function({ message, client }) {
+module.exports = function ({ message, client }) {
     if (!message.content.startsWith(Config.prefix)) return;
     let args = message.content.slice(Config.prefix.length).split(" ");
 
-    let command = client.commands.get(args[0]);
+    if (args[0] === "help") {
+        return new Help(message, args.slice(1), client);
+    }
+
+    let command = client.commands.get(args[0]) || client.aliases.get(args[0]);
 
     if (!command) return;
 
@@ -24,10 +29,7 @@ module.exports = function({ message, client }) {
             return;
         }
 
-        console.log
         let sub = client.subCommands.get(args[0]);
-
-        console.log(sub)
 
         if (sub) {
             let subArgs = sub.options.hasArgs(args.slice(1), message);

@@ -7,7 +7,8 @@ module.exports = class BaseCommand {
      */
     constructor(data, options) {
         this.name = data.name;
-        this.description = data.description;
+        this.aliases = data.aliases || [];
+        this.description = data.description || undefined;
 
         this.options = Object.assign({
             hasArgs: (args, message) => {
@@ -15,6 +16,8 @@ module.exports = class BaseCommand {
             },
             permLevel: undefined,
             enabled: true,
+            subCommand: false,
+            category: undefined,
             requiredArgs: 0,
             permissions: [],
             subs: undefined

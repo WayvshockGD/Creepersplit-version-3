@@ -1,5 +1,4 @@
 import Eris from "eris";
-import { Define } from "./Define";
 
 declare namespace Extended {
     interface ExtendedMessageContent extends Eris.AdvancedMessageContent {}
@@ -22,5 +21,6 @@ declare namespace Classes {
     export class Util {
         codeBlock(content: string): string;
         sendMessage(content: Eris.MessageContent): Promise<Eris.Message<Eris.TextableChannel>>;
+        memberRoles(member: Eris.Member): Eris.Role[];
     }
 }

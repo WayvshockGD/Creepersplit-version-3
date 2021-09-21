@@ -4,6 +4,7 @@ import { Extended } from "./Classes";
 
 export interface CommandData {
     name: string;
+    aliases: string[];
     description: string;
     execute: commandFunction;
     options: CommandOptions;
@@ -12,7 +13,9 @@ export interface CommandData {
 export interface CommandOptions {
     permLevel: perms;
     enabled: boolean;
-    subs: string[];
+    category: string;
+    subs: CommandData[];
+    subCommand: boolean;
     requiredArgs: number;
     hasArgs: (args: string[], message: Extended.Message) => string | boolean;
     permissions: Array<keyof Eris.Constants["Permissions"]>;

@@ -1,5 +1,5 @@
 const { Message, Guild } = require("eris");
-const Util = require("../Util");
+const Util = require("../util/Util");
 
 module.exports = class ExtendedMessage extends Message {
     constructor(data, client) {

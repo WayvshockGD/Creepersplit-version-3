@@ -24,6 +24,11 @@ module.exports = class Creeper extends Eris.Client {
          */
         this.subCommands = new Map();
 
+        /**
+         * @type {import("../typings/Command").commandMap}
+         */
+        this.aliases = new Map();
+
         this.type = Config.beta ? "Beta" : "Prod"
 
         this.loadCommands();
@@ -33,6 +38,7 @@ module.exports = class Creeper extends Eris.Client {
         this.on("rawWS", (event) => {
             if (event.t === "MESSAGE_CREATE") {
                 let extendedMessage = new ExtendedMessage(event.d, this);
+                
                 return MessageCreate({
                     message: extendedMessage,
                     client: this
@@ -40,11 +46,13 @@ module.exports = class Creeper extends Eris.Client {
             };
         });
 
-        this.on("ready", () => Ready());
+        this.on("ready", () => {
+            Ready();
+        });
     }
 
     /**
-     * @param {import("@typings/Define").Define.Colors} color
+     * @param {import("../typings/Define").Define.Colors} color
      */
     getColor(color) {
         let colorTree = {
@@ -59,7 +67,7 @@ module.exports = class Creeper extends Eris.Client {
 
     loadCommands() {
         fs.readdirSync("./commands/").forEach(folder => {
-            fs.readdirSync(`./commands/${folder}`).forEach(f => {
+            fs.readdirSync(`./commands/${folder}`).filter(fi => fi.endsWith(".js")).forEach(f => {
                 let Command = require(`../commands/${folder}/${f}`);
                 /**
                  * @type {import("../typings/Command").CommandData}
@@ -67,10 +75,36 @@ module.exports = class Creeper extends Eris.Client {
                 let data = new Command();
 
                 if (!data.options.subs) {
-                    this.commands.set(data.name, data);
+                    if (!data.options.subCommand) {
+                        if (!data.options.category) data.options.category = folder.toLowerCase();
+                        this.commands.set(data.name, data);
+
+                        if (data.aliases) {
+                            for (let a of data.aliases) {
+                                this.aliases.set(a, data);
+                            }
+                        }
+                    }
                 } else {
+                    if (!data.options.subCommand) {
+                        if (!data.options.category) data.options.category = folder.toLowerCase();
+                        this.commands.set(data.name, data);
+                    }
+                    if (data.aliases) {
+                        for(let a of data.aliases) {
+                            this.aliases.set(a, data);
+                        }
+                    }
                     for (let s of data.options.subs) {
-                        this.subCommands.set(s, this.commands.get(s));
+                        let subCommand;
+
+                        if (typeof s === "string") {
+                            subCommand = this.commands.get(s);
+                        } else {
+                            subCommand = s;
+                        }
+
+                        this.subCommands.set(subCommand.name, subCommand);
                     }
                 }
             });
