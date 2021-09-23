@@ -1,6 +1,6 @@
 import Eris from "eris";
 import { Define } from "./Define";
-import { Extended } from "./Classes";
+import { Classes, Extended } from "./Classes";
 
 export interface CommandData {
     name: string;
@@ -12,8 +12,13 @@ export interface CommandData {
 
 export interface pluginData {
     name: string;
+    commands: commandPlugin;
+}
+
+export interface commandPlugin {
+    name: string;
     enabled: boolean;
-    execute: (message: Eris.Message, args: string[], client: Define.Creeper) => void;
+    execute: commandFunction;
 }
 
 export interface CommandOptions {
@@ -30,6 +35,8 @@ export interface CommandOptions {
 export interface CommandCTX {
     client: Define.Creeper;
     message: Extended.Message;
+    guildConfig: Classes.GuildConfig;
+    prefix: string;
     args: {
         command: string[];
         has: string | object | number;

@@ -1,15 +1,22 @@
 const Config = require("../../Config");
+const GuildConfig = require("../GuildConfig");
 const Help = require("../Help");
 
 /**
  * @param {import("../../typings/Event").MessageCreateEvent} param
  */
-module.exports = function ({ message, client }) {
-    if (!message.content.startsWith(Config.prefix)) return;
-    let args = message.content.slice(Config.prefix.length).split(" ");
+module.exports = async function ({ message, client }) {
+    if (!message.channel.type === 0) return;
+
+    let guildConfig = new GuildConfig(client.db, message.channel.guild);
+
+    let prefix = await guildConfig.get("prefixes", "prefix", Config.prefix);
+
+    if (!message.content.startsWith(prefix)) return;
+    let args = message.content.slice(prefix.length).split(" ");
 
     if (args[0] === "help") {
-        return new Help(message, args.slice(1), client);
+        return new Help(message, args.slice(1), client, prefix);
     }
 
     client.plugins.onMessage(message, args);
@@ -26,6 +33,11 @@ module.exports = function ({ message, client }) {
         return;
     }
 
+    if (command.options.permLevel === "Admin" 
+        && !message.channel.guild.permissionsOf(message.author.id).has("manageGuild")) {
+            return message.util.sendMessage(`You need the perm \`manageGuild\` to access \`${command.name}\``);
+    }
+
     if (command.options.subs) {
         if (!command.options.enabled) {
             return;
@@ -40,6 +52,8 @@ module.exports = function ({ message, client }) {
             return sub.execute({
                 client,
                 message,
+                guildConfig,
+                prefix,
                 args: {
                     command: args,
                     has: subArgs
@@ -50,6 +64,8 @@ module.exports = function ({ message, client }) {
 
     command.execute({
         message,
+        guildConfig,
+        prefix,
         args: {
             command: args,
             has

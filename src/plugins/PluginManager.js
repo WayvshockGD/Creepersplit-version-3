@@ -1,5 +1,4 @@
 let Eris = require("eris");
-let fs = require("fs");
 let Creeper = require("../Creeper");
 
 module.exports = class PluginManager {
@@ -8,32 +7,37 @@ module.exports = class PluginManager {
      */
     constructor(client) {
         /**
-         * @type {Map<string, pluginData>}
+         * @type {Map<string, commandPlugin>}
          */
         this.cache = new Map();
+
+        /**
+         * @type {Map<string, pluginData>}
+         */
+        this.pluginCache = new Map();
 
         this.client = client;
     }
 
     startLoad() {
-        fs.readdirSync("src/plugins/files/").forEach(file => {
+        let index = require("./files/index");
+        for (let plugin of index) {
+            this.pluginCache.set(plugin.name, plugin);
 
-            if (file === "index.js") return;
-            /**
-             * @type {pluginData}
-             */
-            let plugin = require(`./files/${file}`);
+            for (let command of plugin.commands) {
+                this.cache.set(command.name, command);
 
-            if (!typeof plugin === "object") {
-                throw new Error("Plugin is not an object.");
-            } else {
-                this.cache.set(plugin.name, plugin);
+                if (command.hasOwnProperty("aliases")) {
+                    for(let alias of command.aliases) {
+                        this.cache.set(alias, command);
+                    }
+                }
             }
-        })
+        }
     }
 
     /**
-     * @param {Eris.Message} message
+     * @param {import("../../typings/Classes").Extended.Message} message
      * @param {string[]} args
      */
     onMessage(message, args) {
@@ -41,19 +45,30 @@ module.exports = class PluginManager {
             return;
         }
 
-        let plugin = require("./files/index").find(c => c.name === args[0]);
+        let plugin = this.cache.get(args[0]);
 
         if (!plugin) {
             return;
         }
 
-        plugin.execute(message, args, this.client);
+        if (!plugin.enabled) {
+            return message.util.sendMessage("This command plugin is currently disabled.");
+        }
+
+        plugin.execute(message, args.slice(1), this.client);
     }
 }
 
 /**
  * @typedef {object} pluginData
  * @property {string} name
+ * @property {comandPlugin[]} commands
+ */
+
+/**
+ * @typedef {object} commandPlugin
+ * @property {string} name
  * @property {boolean} enabled
- * @property {(message: Eris.Message, args: string[], client: Creeper) => void} execute
+ * @property {Array<string>} aliases
+ * @property {(message: import("../../typings/Classes").Extended.Message, args: string[], client: Creeper) => void} execute
  */

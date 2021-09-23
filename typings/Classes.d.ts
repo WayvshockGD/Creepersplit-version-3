@@ -1,5 +1,6 @@
 import Eris from "eris";
-import { pluginData } from "./Command";
+import { Knex } from "knex";
+import { commandPlugin, pluginData } from "./Command";
 
 declare namespace Extended {
     interface ExtendedMessageContent extends Eris.AdvancedMessageContent {}
@@ -20,8 +21,14 @@ declare namespace Extended {
 
 declare namespace Classes {
     export class PluginManager {
-        cache: Map<string, pluginData>;
+        cache: Map<string, commandPlugin>;
+        pluginCache: Map<string, pluginData>;
         onMessage(message: Extended.Message, args: string[]): void;
+    }
+    export class GuildConfig {
+        constructor(db: Knex, guild: Eris.Guild);
+        public setOrEdit(table: string, query: object): Promise<any>;
+        public get(table: string, query: string, defaultQuery: string): Promise<any>;
     }
     export class Util {
         codeBlock(content: string): string;

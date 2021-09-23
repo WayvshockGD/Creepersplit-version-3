@@ -4,7 +4,7 @@ import { Classes } from "./Classes";
 import { CommandData } from "./Command";
 
 declare namespace Define {
-    type Colors = "Warning" | "Info" | "Success" | "Default";
+    type Colors = "Warning" | "Info" | "Success" | "Default" | "Random";
 
     interface MessageOptions {
         delete: number | string;

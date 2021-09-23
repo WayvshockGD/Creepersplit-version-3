@@ -18,20 +18,48 @@ exports.meme = async function(message, args, client) {
      * @type {Eris.Embed}
      */
     let embed = {
-        title: random.title
+        description: "",
+        title: random.title,
+        author: {
+            name: random.author
+        },
+        image: {
+            url: ""
+        }
     };
 
-    if (random.thumbail) {
-        embed["image"].url = random.thumbail;
+    if (random.over_18 && !message.channel.nsfw) {
+        return message.channel.createMessage("I cannot send a over 18 post in a non-nsfw channel.");
+    }
+
+
+    if (random.preview.images.length) {
+        embed.image.url = random.preview.images[0].source.url.replace('&amp;', '&');
     }
 
     if (random.self_text) {
-        embed["description"] = random.self_text;
-    }
+      embed.description = random.self_text;
+    };
 
     return message.util.sendMessage({
         embeds: [{
-            footer: { text: `` }
+            ...embed,
+            footer: { text: `🗨️ ${random.num_comments} 👍 ${random.ups}` },
+            color: client.getColor("Random")
         }]
     })
+}
+
+/**
+ * @param {import("../../../typings/Classes").Extended.Message} message 
+ * @param {string[]} args
+ */
+exports.clyde = function(message, args) {
+    if (!args.length) {
+        return message.util.sendMessage("Say something for clyde");
+    };
+
+    let encoded = encodeURI(`https://ctk-api.herokuapp.com/clyde/${args.join(" ")}`);
+
+    return message.util.sendMessage(encoded);
 }

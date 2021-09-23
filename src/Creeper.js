@@ -6,6 +6,7 @@ const Ready = require("./events/Ready");
 const ExtendedMessage = require("./extend/ExtendedMessage");
 const KNEX = require("./Knex");
 const PluginManager = require("./plugins/PluginManager");
+const Topgg = require("./Topgg");
 
 // For using beta or prod token.
 let token = Config.beta ? Config.token.beta : Config.token.bot;
@@ -32,10 +33,11 @@ module.exports = class Creeper extends Eris.Client {
         this.aliases = new Map();
 
         this.plugins = new PluginManager(this);
+        this.topgg = new Topgg(this);
 
         this.db = KNEX;
 
-        this.type = Config.beta ? "Beta" : "Prod"
+        this.type = Config.beta ? "Beta" : "Prod";
 
         this.loadCommands();
     }
@@ -54,6 +56,7 @@ module.exports = class Creeper extends Eris.Client {
 
         this.on("ready", () => {
             Ready(this);
+            //this.topgg.post();
         });
     }
 
@@ -65,7 +68,8 @@ module.exports = class Creeper extends Eris.Client {
             Warning: 0xfc0303,
             Info: 0xf4fc03,
             Success: 0x03fc39,
-            Default: 0xffa024
+            Default: 0xffa024,
+            Random: Math.floor(Math.random() * (0xffffff + 1))
         };
 
         return colorTree[color];

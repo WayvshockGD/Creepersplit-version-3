@@ -5,11 +5,13 @@ module.exports = class Help {
      * @param {Creeper} client
      * @param {import("../typings/Classes").Extended.Message} message 
      * @param {string[]} args 
+     * @param {string} prefix
      */
-    constructor(message, args, client) {
+    constructor(message, args, client, prefix) {
         this.message = message;
         this.args = args;
         this.client = client;
+        this.prefix = prefix;
 
         if (!args.length) {
             this.sendMenu();
@@ -19,7 +21,7 @@ module.exports = class Help {
     }
 
     sendMenu() {
-        let prefix = this.client.config.prefix;
+        let prefix = this.prefix;
 
         let core = [];
         let info = [];
