@@ -29,7 +29,7 @@ let Plugin = require("./Plugin");
 ```js
 // Plugin.js
 
-exports.command = function(message, args, client) {
+exports.something = function(message, args, client) {
     // Code...
 };
 ```
