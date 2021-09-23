@@ -1,6 +1,7 @@
 let Eris = require("eris");
 let fs = require("fs");
 const Config = require("../Config");
+const ErrorHandler = require("./ErrorHandler");
 const MessageCreate = require("./events/MessageCreate");
 const Ready = require("./events/Ready");
 const ExtendedMessage = require("./extend/ExtendedMessage");
@@ -40,6 +41,7 @@ module.exports = class Creeper extends Eris.Client {
         this.type = Config.beta ? "Beta" : "Prod";
 
         this.loadCommands();
+        ErrorHandler(this);
     }
 
     initEvents() {
