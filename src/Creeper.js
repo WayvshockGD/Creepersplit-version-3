@@ -56,7 +56,7 @@ module.exports = class Creeper extends Eris.Client {
 
         this.on("ready", () => {
             Ready(this);
-            //this.topgg.post();
+            this.topgg.post();
         });
     }
 
