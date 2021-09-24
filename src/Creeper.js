@@ -3,6 +3,7 @@ let fs = require("fs");
 const Config = require("../Config");
 const ErrorHandler = require("./ErrorHandler");
 const MessageCreate = require("./events/MessageCreate");
+const MessageReactionAdd = require("./events/MessageReactionAdd");
 const Ready = require("./events/Ready");
 const ExtendedMessage = require("./extend/ExtendedMessage");
 const KNEX = require("./Knex");
@@ -56,9 +57,13 @@ module.exports = class Creeper extends Eris.Client {
             };
         });
 
+        this.on("messageReactionAdd", (message, emoji, react) => {
+            MessageReactionAdd(message, emoji, react);
+        });
+
         this.on("ready", () => {
             Ready(this);
-            this.topgg.post();
+            //this.topgg.post();
         });
     }
 

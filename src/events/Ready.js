@@ -35,6 +35,6 @@ module.exports = async function(client) {
             t.string("guild").notNullable();
             t.string("channel").notNullable();
             t.string("user");
-        })
+        });
     }
 };
