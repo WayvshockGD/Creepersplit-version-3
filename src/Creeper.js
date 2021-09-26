@@ -6,6 +6,7 @@ const MessageCreate = require("./events/MessageCreate");
 const MessageReactionAdd = require("./events/MessageReactionAdd");
 const Ready = require("./events/Ready");
 const ExtendedMessage = require("./extend/ExtendedMessage");
+const GuildConfig = require("./GuildConfig");
 const KNEX = require("./Knex");
 const PluginManager = require("./plugins/PluginManager");
 const Topgg = require("./Topgg");
@@ -56,6 +57,20 @@ module.exports = class Creeper extends Eris.Client {
                 });
             };
         });
+
+        this.on("channelDelete", async (channel) => {
+            let guildConfig = new GuildConfig(this.db, channel.guild);
+
+            let ticketChannel = await guildConfig.get("ticket_users", "channel", {
+                customFilter: (d) => d.channel === channel.id
+            });
+
+            if (!ticketChannel) {
+                return;
+            } else {
+                await guildConfig.delete("ticket_users", { channel: channel.id });
+            }
+        })
 
         this.on("messageReactionAdd", (message, emoji, react) => {
             MessageReactionAdd(message, emoji, react);

@@ -8,9 +8,11 @@ const Help = require("../Help");
 module.exports = async function ({ message, client }) {
     if (!message.channel.type === 0) return;
 
-    let guildConfig = new GuildConfig(client.db, message.channel.guild);
+    let guildConfig = new GuildConfig(client.db, message.channel.guild, message);
 
-    let prefix = await guildConfig.get("prefixes", "prefix", Config.prefix);
+    let prefix = await guildConfig.get("prefixes", "prefix", {
+        defaultQuery: Config.prefix
+    });
 
     if (!message.content.startsWith(prefix)) return;
     let args = message.content.slice(prefix.length).split(" ");

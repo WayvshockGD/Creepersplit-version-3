@@ -20,6 +20,12 @@ declare namespace Extended {
 }
 
 declare namespace Classes {
+    interface getOptions {
+        defaultQuery: string;
+        withUser: boolean;
+        customFilter: (data: any) => void;
+    }
+
     export class PluginManager {
         cache: Map<string, commandPlugin>;
         pluginCache: Map<string, pluginData>;
@@ -27,8 +33,9 @@ declare namespace Classes {
     }
     export class GuildConfig {
         constructor(db: Knex, guild: Eris.Guild);
-        public setOrEdit(table: string, query: object): Promise<any>;
-        public get(table: string, query: string, defaultQuery: string): Promise<any>;
+        public setOrEdit(table: string, query: object, update: boolean): Promise<any>;
+        public get(table: string, query: object | string, options: getOptions): Promise<any>;
+        public delete(table: string, query: object): Promise<void>;
     }
     export class Util {
         codeBlock(content: string): string;

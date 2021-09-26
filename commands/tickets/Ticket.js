@@ -1,12 +1,12 @@
 const BaseCommand = require("../../src/BaseCommand");
 const TicketClose = require("./TicketClose");
-const TicketNew = require("./TIcketNew");
+const TicketNew = require("./TicketNew");
 const TicketSet = require("./TicketSet");
 
 module.exports = class Ticket extends BaseCommand {
     constructor() {
         super({ "name": "ticket" }, {
-            enabled: false,
+            enabled: true,
             subs: [
                 new TicketClose(),
                 new TicketNew(),
